@@ -5,7 +5,7 @@ dotenv.config();
 
 const server = app();
 
-console.log(".\n.\n.\n.\nHIRING_PLATFORM");
+console.log(".\n.\n.\n.\n.\nHIRING_PLATFORM");
 server.listen(8000, async () => {
   console.log("Server Started at port 8000");
   try {
