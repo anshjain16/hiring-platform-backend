@@ -1,5 +1,6 @@
 const app = require("express");
 const connectDB = require("./db/connect");
+// const runInserts = require("./dbtester/insert");
 const dotenv = require("dotenv");
 dotenv.config();
 

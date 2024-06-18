@@ -105,7 +105,7 @@ const companyEmployeeSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     position: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
