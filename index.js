@@ -1,34 +1,17 @@
 const app = require("express");
+const connectDB = require("./db/connect");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const server = app();
 
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
-
-async function main() {
-  await prisma.user.create({
-    data: {
-      name: "Rich",
-      email: "hello@prisma.com",
-    },
-  });
-
-  const allUsers = await prisma.user.findMany({
-    include: {},
-  });
-  console.dir(allUsers, { depth: null });
-}
-
-main()
-  .catch(async (e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
-
-server.listen(8000, () => {
-  console.log("Server Started");
+console.log(".\n.\n.\nHIRING_PLATFORM");
+server.listen(8000, async () => {
+  console.log("Server Started at port 8000");
+  try {
+    await connectDB(process.env.DATABASE_URL);
+    console.log("Connected to database");
+  } catch (error) {
+    console.log(error);
+  }
 });
