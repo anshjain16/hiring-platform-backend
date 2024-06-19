@@ -1,16 +1,23 @@
-const Company = require('../models/schema');
+const { Company } = require("../models/schema");
 exports.registerCompany = async (req, res) => {
   try {
     const { name, desc, username, password, logoUrl, location } = req.body;
 
     const existingCompany = await Company.findOne({ username });
     if (existingCompany) {
-      return res.status(400).json({ error: 'Username already exists' });
+      return res.status(400).json({ error: "Username already exists" });
     }
 
-    const newCompany = new Company({ name, desc, username, password, logoUrl, location });
+    const newCompany = new Company({
+      name,
+      desc,
+      username,
+      password,
+      logoUrl,
+      location,
+    });
     await newCompany.save();
-    res.status(201).json({ message: 'Company registered successfully' });
+    res.status(201).json({ message: "Company registered successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -22,15 +29,14 @@ exports.loginCompany = async (req, res) => {
     const company = await Company.findOne({ username });
 
     if (!company || company.password !== password) {
-      return res.status(400).json({ error: 'Invalid username or password' });
+      return res.status(400).json({ error: "Invalid username or password" });
     }
 
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: "Login successful" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 exports.updateCompany = async (req, res) => {
   try {
@@ -44,7 +50,7 @@ exports.updateCompany = async (req, res) => {
     );
 
     if (!updatedCompany) {
-      return res.status(404).json({ error: 'Company not found' });
+      return res.status(404).json({ error: "Company not found" });
     }
 
     res.status(200).json(updatedCompany);
