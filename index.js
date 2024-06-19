@@ -1,13 +1,14 @@
-const app = require("express");
+const express = require('express')
 const connectDB = require("./db/connect");
 // const runInserts = require("./dbtester/insert");
 const dotenv = require("dotenv");
+const companyRoutes = require('./routes/companyRoutes');
 dotenv.config();
 
-const server = app();
-
-console.log(".\n.\n.\n.\n.\nHIRING_PLATFORM");
-server.listen(8000, async () => {
+const app = express();
+app.use(express.json());
+app.use('/api',companyRoutes)
+app.listen(8000, async () => {
   console.log("Server Started at port 8000");
   try {
     await connectDB(process.env.DATABASE_URL);
