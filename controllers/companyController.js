@@ -58,3 +58,36 @@ exports.updateCompany = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+exports.getCompanyById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const company = await Company.findById(id);
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    res.status(200).json(company);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.searchCompaniesByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+    const companies = await Company.find({ name: { $regex: name, $options: 'i' } });
+
+    if (companies.length === 0) {
+      return res.status(404).json({ error: 'No companies found' });
+    }
+
+    res.status(200).json(companies);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+ 
