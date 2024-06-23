@@ -1,7 +1,7 @@
 const ProgrammingQuestion = require('../models/ProgrammingQuestion');
 
 
-exports.createQuestion = async (req, res) => {
+const createQuestion = async (req, res) => {
   try {
     const newQuestion = new ProgrammingQuestion(req.body);
     const savedQuestion = await newQuestion.save();
@@ -11,7 +11,7 @@ exports.createQuestion = async (req, res) => {
   }
 };
 
-exports.getAllQuestions = async (req, res) => {
+const getAllQuestions = async (req, res) => {
     try {
       const questions = await ProgrammingQuestion.find();
       res.status(200).json(questions);
@@ -20,7 +20,7 @@ exports.getAllQuestions = async (req, res) => {
     }
   };
   
-  exports.getQuestionById = async (req, res) => {
+  const getQuestionById = async (req, res) => {
     try {
       const question = await ProgrammingQuestion.findById(req.params.id);
       if (!question) {
@@ -32,6 +32,9 @@ exports.getAllQuestions = async (req, res) => {
     }
   };
 
+
+
+  //hiring or company id is necessary for updating and deleting not present in schema
   module.exports = {
     createQuestion,
     getAllQuestions,
