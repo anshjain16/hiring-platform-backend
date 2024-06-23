@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const companyRoutes = require("./routes/company");
 const hiringProcessRoutes = require("./routes/hiringProcess");
 const codingRouteRoutes = require("./routes/codingRound");
+const interviewRoundRoutes = require("./routes/interviewRound")
 dotenv.config();
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/company", companyRoutes);
 app.use("/api/hiring", hiringProcessRoutes);
 app.use("/api/codinground", codingRouteRoutes);
+app.use('/api/interviewrounds', interviewRoundRoutes);
 
 app.listen(8000, async () => {
   console.log("Server Started at port 8000");
