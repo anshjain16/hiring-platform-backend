@@ -1,5 +1,6 @@
 const { Company } = require("../models/schema");
-exports.registerCompany = async (req, res) => {
+
+const registerCompany = async (req, res) => {
   try {
     const { name, desc, username, password, logoUrl, location } = req.body;
 
@@ -23,7 +24,7 @@ exports.registerCompany = async (req, res) => {
   }
 };
 
-exports.loginCompany = async (req, res) => {
+const loginCompany = async (req, res) => {
   try {
     const { username, password } = req.body;
     const company = await Company.findOne({ username });
@@ -38,7 +39,7 @@ exports.loginCompany = async (req, res) => {
   }
 };
 
-exports.updateCompany = async (req, res) => {
+const updateCompany = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, desc, logoUrl, location } = req.body;
@@ -59,7 +60,7 @@ exports.updateCompany = async (req, res) => {
   }
 };
 
-exports.getCompanyById = async (req, res) => {
+const getCompanyById = async (req, res) => {
   try {
     const { id } = req.params;
     const company = await Company.findById(id);
@@ -74,7 +75,7 @@ exports.getCompanyById = async (req, res) => {
   }
 };
 
-exports.searchCompaniesByName = async (req, res) => {
+const searchCompaniesByName = async (req, res) => {
   try {
     const { name } = req.query;
     const companies = await Company.find({
@@ -89,4 +90,12 @@ exports.searchCompaniesByName = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+module.exports = {
+  registerCompany,
+  loginCompany,
+  updateCompany,
+  getCompanyById,
+  searchCompaniesByName,
 };

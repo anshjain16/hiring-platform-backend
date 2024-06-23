@@ -1,5 +1,4 @@
-const ProgrammingQuestion = require('../models/ProgrammingQuestion');
-
+const { ProgrammingQuestion } = require("../models/schema");
 
 const createQuestion = async (req, res) => {
   try {
@@ -12,32 +11,29 @@ const createQuestion = async (req, res) => {
 };
 
 const getAllQuestions = async (req, res) => {
-    try {
-      const questions = await ProgrammingQuestion.find();
-      res.status(200).json(questions);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    const questions = await ProgrammingQuestion.find();
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getQuestionById = async (req, res) => {
+  try {
+    const question = await ProgrammingQuestion.findById(req.params.id);
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
     }
-  };
-  
-  const getQuestionById = async (req, res) => {
-    try {
-      const question = await ProgrammingQuestion.findById(req.params.id);
-      if (!question) {
-        return res.status(404).json({ message: 'Question not found' });
-      }
-      res.status(200).json(question);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
+    res.status(200).json(question);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-
-
-  //hiring or company id is necessary for updating and deleting not present in schema
-  module.exports = {
-    createQuestion,
-    getAllQuestions,
-    getQuestionById ,
-  };
-  
+//hiring or company id is necessary for updating and deleting not present in schema
+module.exports = {
+  createQuestion,
+  getAllQuestions,
+  getQuestionById,
+};

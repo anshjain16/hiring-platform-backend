@@ -10,8 +10,8 @@ const {
 
 router.post("/register", registerCompany);
 router.post("/login", loginCompany);
-router.put("/company/:id", updateCompany);
-router.get("/company/:id", getCompanyById);
-router.get("/companies/search", searchCompaniesByName);
+router.put("/update/:id", updateCompany);
+router.get("/get/:id", getCompanyById);
+router.get("/search", searchCompaniesByName);
 
 module.exports = router;

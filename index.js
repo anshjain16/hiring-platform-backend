@@ -5,8 +5,8 @@ const companyRoutes = require("./routes/company");
 const hiringProcessRoutes = require("./routes/hiringProcess");
 const codingRouteRoutes = require("./routes/codingRound");
 const interviewRoundRoutes = require("./routes/interviewRound");
-const companyemployee = require("./routes/companyemployee")
-const question = require("./routes/programmingquestion")
+const companyemployee = require("./routes/companyemployee");
+const question = require("./routes/programmingquestion");
 dotenv.config();
 
 const app = express();
@@ -20,8 +20,9 @@ app.use("/api/company", companyRoutes);
 app.use("/api/hiring", hiringProcessRoutes);
 app.use("/api/codinground", codingRouteRoutes);
 app.use("/api/interviewround", interviewRoundRoutes);
-app.use("/api/companyemployee",companyemployee)
-app.use("/api/question",question);
+app.use("/api/companyemployee", companyemployee);
+app.use("/api/question", question);
+
 app.listen(8000, async () => {
   console.log("Server Started at port 8000");
   try {
