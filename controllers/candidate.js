@@ -1,35 +1,85 @@
-const Candidate = require('../models/schema')
-const getallcandidates = async(req,res)=>{
-    try{
-        const candidate = await Candidate.find({})
-        res.status(200).json({candidate});
-    }
-    catch(error){
-         res.status(500).json({msg:error})
-    }
-}
+const { Candidate } = require("../models/schema");
 
-const candidateregistration = async(req,res)=>{
-    try{
-        const candidate = await Candidate.create(req.body)
-        res.status(201).json({ candidate });
-    }
-    catch(error){
-        res.status(500).json({msg:error})
-    }
-}
+const registerCandidate = async (req, res) => {
+  const { name, username, password, email, university, address, resumeUrl } =
+    req.body;
 
-const getcandidate = async(req,res)=>{
-    try{
-        const {id:candidateId} = req.params;
-        const candidate = await Candidate.findOne({_id:candidateId})
-        if(!candidate){
-            return res.status(404).json({msg:`No candidate with ID :${candidateId}`})
-        }
-        res.status(200).json({candidate});
-       
+  try {
+    const existingCandidate = await Candidate.findOne({
+      $or: [{ username }, { email }],
+    });
+    if (existingCandidate) {
+      return res
+        .status(400)
+        .json({ error: "Username or email already exists" });
     }
-    catch(error){
-        res.status(500).json({msg:error})
+    const candidate = new Candidate({
+      name,
+      username,
+      password,
+      email,
+      university,
+      address,
+      resumeUrl,
+    });
+
+    const savedCandidate = await candidate.save();
+    res.status(201).json({ candidate: savedCandidate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const loginCandidate = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const candidate = await Candidate.findOne({ username, password });
+    if (!candidate) {
+      return res.status(404).json({ error: "Candidate not found" });
     }
-}
+    res.status(200).json({ candidate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateCandidate = async (req, res) => {
+  const { id: candidateId } = req.params;
+  try {
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      candidateId,
+      req.body,
+      { new: true }
+    );
+    if (!updatedCandidate) {
+      return res
+        .status(404)
+        .json({ error: `Candidate not found with ID: ${candidateId}` });
+    }
+    res.status(200).json({ candidate: updatedCandidate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getCandidateById = async (req, res) => {
+  const { id: candidateId } = req.params;
+  try {
+    const candidate = await Candidate.findById(candidateId);
+    if (!candidate) {
+      return res
+        .status(404)
+        .json({ error: `Candidate not found with ID: ${candidateId}` });
+    }
+    res.status(200).json({ candidate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  registerCandidate,
+  loginCandidate,
+  updateCandidate,
+  getCandidateById,
+};

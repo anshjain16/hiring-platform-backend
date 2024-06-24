@@ -127,6 +127,7 @@ const candidateSchema = new mongoose.Schema(
     university: { type: String },
     address: { type: String },
     resumeUrl: { type: String },
+    email: { type: String, required: true, unique: true },
     applicationStatus: {
       type: String,
       enum: ["applied", "under review", "rejected", "accepted"],
