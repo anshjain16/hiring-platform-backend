@@ -31,11 +31,14 @@ const registerCandidate = async (req, res) => {
 };
 
 const loginCandidate = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const candidate = await Candidate.findOne({ username, password });
+    const candidate = await Candidate.findOne({ email });
     if (!candidate) {
       return res.status(404).json({ error: "Candidate not found" });
+    }
+    if (candidate.password != password) {
+      return res.status(404).json({ error: "incorrect password" });
     }
     res.status(200).json({ candidate });
   } catch (error) {
