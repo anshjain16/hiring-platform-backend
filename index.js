@@ -10,6 +10,9 @@ const interviewRoundRoutes = require("./routes/interviewRound");
 const companyemployee = require("./routes/companyemployee");
 const question = require("./routes/programmingquestion");
 const candidateRouter = require("./routes/candidate");
+const programmingQuestionRouter = require("./routes/programmingquestion");
+const processRegistrationRouter = require("./routes/processRegistration");
+
 dotenv.config();
 
 const app = express();
@@ -27,6 +30,8 @@ app.use("/api/interviewround", interviewRoundRoutes);
 app.use("/api/companyemployee", companyemployee);
 app.use("/api/question", question);
 app.use("/api/candidate", candidateRouter);
+app.use("/api/question", programmingQuestionRouter);
+app.use("/api/register", processRegistrationRouter);
 
 app.listen(8000, async () => {
   console.log("Server Started at port 8000");

@@ -40,7 +40,7 @@ const loginCandidate = async (req, res) => {
     if (candidate.password != password) {
       return res.status(404).json({ error: "incorrect password" });
     }
-    res.status(200).json({ candidate });
+    res.status(200).json(candidate);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

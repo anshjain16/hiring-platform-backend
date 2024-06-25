@@ -6,8 +6,8 @@ const {
   getQuestionById,
 } = require("../controllers/programmingquestion");
 
-router.get("/questions", getAllQuestions);
+router.get("/getall/:codingRoundId", getAllQuestions);
 router.get("/questions/:id", getQuestionById);
-router.post("/question", createQuestion);
+router.post("/create/:codingRoundId", createQuestion);
 
 module.exports = router;

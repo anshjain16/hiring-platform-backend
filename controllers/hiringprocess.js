@@ -1,9 +1,12 @@
 const { HiringProcess } = require("../models/schema.js");
+const crypto = require("crypto");
 
 const createHiringProcess = async (req, res) => {
   try {
     const { title, desc, numRounds, startDate, endDate } = req.body;
     const { companyId } = req.params;
+    const token = crypto.randomBytes(20).toString("hex");
+
     // console.log(companyId);
     const newHiringProcess = new HiringProcess({
       title,
@@ -12,6 +15,7 @@ const createHiringProcess = async (req, res) => {
       startDate,
       endDate,
       companyId,
+      registrationLink: token,
     });
 
     await newHiringProcess.save();
