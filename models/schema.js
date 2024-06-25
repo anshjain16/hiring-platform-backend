@@ -50,8 +50,9 @@ const hiringProcessSchema = new mongoose.Schema(
 const codingRoundSchema = new mongoose.Schema(
   {
     numQuestions: { type: Number, required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    date: { type: Date, required: true },
+    startTime: { type: String, required: true },
+    endTime: { type: String, required: true },
     questions: [
       { type: mongoose.Schema.Types.ObjectId, ref: "ProgrammingQuestion" },
     ],

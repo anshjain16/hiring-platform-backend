@@ -1,4 +1,4 @@
-const { InterviewRound } = require("../models/schema");
+const { InterviewRound, HiringProcess } = require("../models/schema");
 const createInterviewRound = async (req, res) => {
   try {
     const { startDate, endDate, duration, type, hiringProcessId } = req.body;
@@ -10,6 +10,13 @@ const createInterviewRound = async (req, res) => {
       hiringProcessId,
     });
     await newInterviewRound.save();
+
+    await HiringProcess.findByIdAndUpdate(
+      hiringProcessId,
+      { $push: { interviewRounds: newInterviewRound._id } },
+      { new: true, useFindAndModify: false }
+    );
+
     res.status(201).json({ message: "Interview Round added successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });

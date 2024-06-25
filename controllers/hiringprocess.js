@@ -2,8 +2,9 @@ const { HiringProcess } = require("../models/schema.js");
 
 const createHiringProcess = async (req, res) => {
   try {
-    const { title, desc, numRounds, startDate, endDate, companyId } = req.body;
-
+    const { title, desc, numRounds, startDate, endDate } = req.body;
+    const { companyId } = req.params;
+    // console.log(companyId);
     const newHiringProcess = new HiringProcess({
       title,
       desc,
