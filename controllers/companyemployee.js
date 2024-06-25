@@ -1,9 +1,9 @@
-const CompanyEmployee = require('../models/schema');
+const { CompanyEmployee } = require("../models/schema");
 const getEmployeeById = async (req, res) => {
   try {
-    const employee = await CompanyEmployee.findById(req.params.id)
+    const employee = await CompanyEmployee.findById(req.params.id);
     if (!employee) {
-      return res.status(404).json({ message: 'Employee not found' });
+      return res.status(404).json({ message: "Employee not found" });
     }
     res.status(200).json(employee);
   } catch (error) {
@@ -45,7 +45,7 @@ const updateEmployee = async (req, res) => {
     );
 
     if (!updatedEmployee) {
-      return res.status(404).json({ message: 'Employee not found' });
+      return res.status(404).json({ message: "Employee not found" });
     }
 
     res.status(200).json(updatedEmployee);
@@ -54,11 +54,9 @@ const updateEmployee = async (req, res) => {
   }
 };
 
-
 module.exports = {
-    updateEmployee,
-    createEmployee,
-    getAllEmployees,
-    getEmployeeById,
-  };
-  
+  updateEmployee,
+  createEmployee,
+  getAllEmployees,
+  getEmployeeById,
+};
