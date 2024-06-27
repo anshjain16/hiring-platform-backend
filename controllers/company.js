@@ -38,6 +38,7 @@ const loginCompany = async (req, res) => {
       {
         username: company.username,
         id: company.id,
+        type: "company",
       },
       "karina"
     );

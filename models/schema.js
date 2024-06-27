@@ -56,6 +56,7 @@ const codingRoundSchema = new mongoose.Schema(
   {
     numQuestions: { type: Number, required: true },
     date: { type: Date, required: true },
+    maxScore: { type: Number, default: 100 },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     questions: [
@@ -95,9 +96,10 @@ const programmingQuestionSchema = new mongoose.Schema(
     desc: { type: String, required: true },
     constraints: { type: String, required: true },
     example: { type: String, required: true },
+    score: { type: Number, required: true },
     languages: {
       type: [String],
-      enum: ["c++", "java", "python"],
+      enum: ["cpp", "java", "python"],
       required: true,
     },
     testcases: [
@@ -105,6 +107,7 @@ const programmingQuestionSchema = new mongoose.Schema(
         input: { type: String, required: true },
         expectedOutput: { type: String, required: true },
         isHidden: { type: Boolean, default: false },
+        weightage: { type: Number, default: 0 },
       },
     ],
     timeLimit: { type: Number, required: true },
@@ -214,6 +217,56 @@ resultSchema.virtual("round", {
   justOne: true,
 });
 
+const submissionSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    questionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProgrammingQuestion",
+      required: true,
+    },
+    submissionTime: {
+      type: Date,
+      default: Date.now,
+      required: true,
+    },
+    code: {
+      type: String,
+      required: true,
+    },
+    language: {
+      type: String,
+      enum: ["cpp", "java", "python"],
+      required: true,
+    },
+    result: {
+      type: String,
+      enum: ["pass", "fail", "partial"],
+      required: true,
+    },
+    testCasesPassed: {
+      type: Number,
+      required: true,
+    },
+    totalTestCases: {
+      type: Number,
+      required: true,
+    },
+    score: {
+      type: Number,
+      required: true,
+    },
+    token: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
+
 module.exports = {
   Company: mongoose.model("Company", companySchema),
   HiringProcess: mongoose.model("HiringProcess", hiringProcessSchema),
@@ -227,4 +280,5 @@ module.exports = {
   Candidate: mongoose.model("Candidate", candidateSchema),
   Registration: mongoose.model("Registration", registrationSchema),
   Result: mongoose.model("Result", resultSchema),
+  Submission: mongoose.model("Submission", submissionSchema),
 };

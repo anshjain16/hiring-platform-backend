@@ -1,4 +1,5 @@
 const { Candidate } = require("../models/schema");
+const jwt = require("jsonwebtoken");
 
 const registerCandidate = async (req, res) => {
   const { name, username, password, email, university, address, resumeUrl } =
@@ -40,7 +41,16 @@ const loginCandidate = async (req, res) => {
     if (candidate.password != password) {
       return res.status(404).json({ error: "incorrect password" });
     }
-    res.status(200).json(candidate);
+
+    const token = jwt.sign(
+      {
+        username: candidate.email,
+        id: candidate._id,
+        type: "candidate",
+      },
+      "karina"
+    );
+    res.status(200).json({ candidate, access_token: token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
