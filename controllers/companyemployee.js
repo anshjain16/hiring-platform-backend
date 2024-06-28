@@ -13,7 +13,8 @@ const getEmployeeById = async (req, res) => {
 
 const getAllEmployees = async (req, res) => {
   try {
-    const employees = await CompanyEmployee.find();
+    const { companyId } = req.params;
+    const employees = await CompanyEmployee.find({ companyId });
     res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ message: error.message });

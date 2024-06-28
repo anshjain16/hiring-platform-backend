@@ -76,13 +76,13 @@ const updateCandidate = async (req, res) => {
 };
 
 const getCandidateById = async (req, res) => {
-  const { id: candidateId } = req.params;
+  const { id } = req.params;
   try {
-    const candidate = await Candidate.findById(candidateId);
+    const candidate = await Candidate.findById(id);
     if (!candidate) {
       return res
         .status(404)
-        .json({ error: `Candidate not found with ID: ${candidateId}` });
+        .json({ error: `Candidate not found with ID: ${id}` });
     }
     res.status(200).json({ candidate });
   } catch (error) {

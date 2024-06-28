@@ -56,7 +56,6 @@ const codingRoundSchema = new mongoose.Schema(
   {
     numQuestions: { type: Number, required: true },
     date: { type: Date, required: true },
-    maxScore: { type: Number, default: 100 },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     questions: [
@@ -160,6 +159,20 @@ const candidateSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const interviewSlotSchema = new mongoose.Schema({
+  date: { type: Date, required: true },
+  interviewId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "InterviewRound",
+    required: true,
+  },
+  interviewerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CompanyEmployee",
+    required: true,
+  },
+});
+
 const registrationSchema = new mongoose.Schema(
   {
     candidateId: {
@@ -177,18 +190,7 @@ const registrationSchema = new mongoose.Schema(
       enum: ["registered", "completed", "failed"],
       default: "registered",
     },
-    interviewSlots: [
-      {
-        roundNumber: { type: Number, required: true },
-        startDateTime: { type: Date, required: true },
-        endDateTime: { type: Date, required: true },
-        interviewerId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "CompanyEmployee",
-          required: true,
-        },
-      },
-    ],
+    interviewSlots: [interviewSlotSchema],
   },
   { timestamps: true }
 );
@@ -281,4 +283,5 @@ module.exports = {
   Registration: mongoose.model("Registration", registrationSchema),
   Result: mongoose.model("Result", resultSchema),
   Submission: mongoose.model("Submission", submissionSchema),
+  InterviewSlot: mongoose.model("InterviewSlot", interviewSlotSchema),
 };

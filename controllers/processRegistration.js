@@ -1,4 +1,8 @@
-const { HiringProcess, Registration } = require("../models/schema");
+const {
+  HiringProcess,
+  Registration,
+  InterviewSlot,
+} = require("../models/schema");
 
 const createRegistration = async (req, res) => {
   try {
@@ -38,4 +42,59 @@ const createRegistration = async (req, res) => {
   }
 };
 
-module.exports = { createRegistration };
+const getRegistrationsForProcess = async (req, res) => {
+  try {
+    const { processId } = req.params;
+    const registrations = await Registration.find({
+      hiringProcessId: processId,
+    })
+      .populate("candidateId")
+      .exec();
+
+    const candidates = registrations.map(
+      (registration) => registration.candidateId
+    );
+
+    const listRegistrations = await Registration.find({
+      hiringProcessId: processId,
+    });
+
+    res.status(200).json({ candidates, listRegistrations });
+  } catch (error) {
+    console.error("Failed to fetch registrations for process:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch registrations for process" });
+  }
+};
+
+const addInterviewSlot = async (req, res) => {
+  const { candidateId, hiringProcessId } = req.params;
+  const { interviewerId, date, interviewId } = req.body;
+  // const interviewId = id;
+  try {
+    const registration = await Registration.findOne({
+      candidateId,
+      hiringProcessId,
+    });
+
+    registration.interviewSlots.push({
+      interviewerId,
+      date,
+      interviewId,
+    });
+
+    await registration.save();
+
+    res.json({ message: "Interview slot added successfully", registration });
+  } catch (error) {
+    // console.error("Failed to add interview slot:", error);
+    res.status(500).json({ error: "Failed to add interview slot" });
+  }
+};
+
+module.exports = {
+  createRegistration,
+  getRegistrationsForProcess,
+  addInterviewSlot,
+};
