@@ -125,6 +125,7 @@ const companyEmployeeSchema = new mongoose.Schema(
     name: { type: String, required: true },
     position: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
@@ -187,7 +188,7 @@ const registrationSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["registered", "completed", "failed"],
+      enum: ["registered", "completed", "failed", "passed"],
       default: "registered",
     },
     interviewSlots: [interviewSlotSchema],
@@ -205,6 +206,7 @@ const resultSchema = new mongoose.Schema(
     roundId: { type: mongoose.Schema.Types.ObjectId, required: true },
     roundType: { type: String, enum: ["coding", "interview"], required: true },
     score: { type: Number },
+    status: { type: String, enum: ["Pass", "Fail"], required: true },
     feedback: { type: String },
   },
   { timestamps: true }

@@ -93,8 +93,23 @@ const addInterviewSlot = async (req, res) => {
   }
 };
 
+const updateStatus = async (req, res) => {
+  try {
+    const { candidateId, hiringId, status } = req.body;
+    const registration = await Registration.findOneAndUpdate(
+      { candidateId, hiringProcessId: hiringId },
+      { status: status == "Failed" ? "failed" : "passed" }
+    );
+
+    res.status(200).json("updated successfuly");
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 module.exports = {
   createRegistration,
   getRegistrationsForProcess,
   addInterviewSlot,
+  updateStatus,
 };

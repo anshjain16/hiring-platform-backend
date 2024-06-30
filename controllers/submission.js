@@ -11,12 +11,12 @@ const createSubmission = async (req, res) => {
     totalTestCases,
     score,
   } = req.body;
-
   try {
-    const submission = Submission.find({ userId, questionId });
-    if (submission) {
+    const submission = await Submission.find({ userId, questionId });
+    // console.log(submission);
+    if (submission[0]) {
       const updatedSubmission = await Submission.findByIdAndUpdate(
-        submission.id,
+        submission[0].id,
         {
           code,
           language,
@@ -42,6 +42,7 @@ const createSubmission = async (req, res) => {
       });
 
       const savedSubmission = await newSubmission.save();
+      // console.log(savedSubmission);
       res.status(201).json(savedSubmission);
     }
   } catch (error) {
@@ -96,4 +97,20 @@ const getSubmissionById = async (req, res) => {
   }
 };
 
-module.exports = { createSubmission, updateSubmission, getSubmissionById };
+const getAllSubmissionsToQuestion = async (req, res) => {
+  try {
+    const { questionId } = req.params;
+    const submissions = await Submission.find({ questionId });
+
+    res.status(200).json(submissions);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+module.exports = {
+  createSubmission,
+  updateSubmission,
+  getSubmissionById,
+  getAllSubmissionsToQuestion,
+};

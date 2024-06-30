@@ -15,6 +15,9 @@ const candidateRouter = require("./routes/candidate");
 const programmingQuestionRouter = require("./routes/programmingquestion");
 const processRegistrationRouter = require("./routes/processRegistration");
 const submissionRouter = require("./routes/submission");
+const resultRouter = require("./routes/result");
+
+const { Candidate } = require("./models/schema");
 
 dotenv.config();
 
@@ -31,30 +34,35 @@ const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();
 
 io.on("connection", (socket) => {
-  console.log(`Socket Connected`, socket.id);
-  socket.on("room:join", (data) => {
-    const { email, room } = data;
-    emailToSocketIdMap.set(email, socket.id);
-    socketidToEmailMap.set(socket.id, email);
-    io.to(room).emit("user:joined", { email, id: socket.id });
-    socket.join(room);
-    io.to(socket.id).emit("room:join", data);
+  socket.on("interviewer:join:room", ({ interviewId }) => {
+    socket.join(interviewId);
+    io.to(socket.id).emit("interviewer:room:joined", { id: socket.id });
   });
 
-  socket.on("user:call", ({ to, offer }) => {
-    io.to(to).emit("incomming:call", { from: socket.id, offer });
+  socket.on("candidate:join:room", ({ interviewId, candidateId }) => {
+    socket.join(interviewId);
+    io.to(socket.id).emit("joined:room", { socketId: socket.id });
+    io.to(interviewId).emit("candidate:join:room", { candidateId });
   });
 
-  socket.on("call:accepted", ({ to, ans }) => {
-    io.to(to).emit("call:accepted", { from: socket.id, ans });
+  socket.on("candidate:leave:room", ({ interviewId }) => {
+    socket.leave(interviewId);
+    io.to(interviewId).emit("candidate:leave:room", { candidateId: socket.id });
   });
 
-  socket.on("peer:nego:needed", ({ to, offer }) => {
-    io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
+  socket.on("call:candidate", ({ interviewId, candidateId, remotePeerId }) => {
+    io.to(interviewId).emit("call:request", { candidateId, remotePeerId });
   });
 
-  socket.on("peer:nego:done", ({ to, ans }) => {
-    io.to(to).emit("peer:nego:final", { from: socket.id, ans });
+  socket.on("call:accepted", ({ interviewerSocketId, candidateSocketId }) => {
+    io.to(interviewerSocketId).emit("call:accepted", {
+      candidateSocketId,
+      interviewerSocketId,
+    });
+  });
+
+  socket.on("call:me", ({ remotePeerId, remoteSocketId }) => {
+    io.to(remoteSocketId).emit("call:me", { remotePeerId });
   });
 });
 
@@ -74,6 +82,7 @@ app.use("/api/candidate", candidateRouter);
 app.use("/api/question", programmingQuestionRouter);
 app.use("/api/register", processRegistrationRouter);
 app.use("/api/submission", submissionRouter);
+app.use("/api/result", resultRouter);
 
 server.listen(8000, async () => {
   console.log("Server Started at port 8000");

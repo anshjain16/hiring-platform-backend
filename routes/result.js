@@ -8,6 +8,6 @@ const {
 
 router.get("/results/", getAllResults);
 router.get("/results/:id", getResultById);
-router.post("/results", createResult);
+router.post("/create", createResult);
 
 module.exports = router;
