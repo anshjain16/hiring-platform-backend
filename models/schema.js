@@ -95,7 +95,7 @@ const programmingQuestionSchema = new mongoose.Schema(
     desc: { type: String, required: true },
     constraints: { type: String, required: true },
     example: { type: String, required: true },
-    score: { type: Number, required: true },
+    score: { type: Number, default: 20 },
     languages: {
       type: [String],
       enum: ["cpp", "java", "python"],
@@ -125,7 +125,7 @@ const companyEmployeeSchema = new mongoose.Schema(
     name: { type: String, required: true },
     position: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",

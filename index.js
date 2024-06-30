@@ -62,7 +62,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("call:me", ({ remotePeerId, remoteSocketId }) => {
-    io.to(remoteSocketId).emit("call:me", { remotePeerId });
+    io.to(remoteSocketId).emit("call:me", { remoteSocketId, remotePeerId });
+  });
+  socket.on("id:transfer", ({ remoteSocketId, candidateId }) => {
+    io.to(remoteSocketId).emit("id:transfer", { candidateId });
   });
 });
 

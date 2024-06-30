@@ -24,7 +24,10 @@ const createRegistration = async (req, res) => {
     if (existingRegistration) {
       return res
         .status(200)
-        .json({ message: "Candidate already registered for this process" });
+        .json({
+          hiringId: hiringProcess._id,
+          companyId: hiringProcess.companyId,
+        });
     }
 
     const registration = new Registration({
@@ -35,7 +38,12 @@ const createRegistration = async (req, res) => {
 
     const savedRegistration = await registration.save();
 
-    res.status(201).json(savedRegistration);
+    res
+      .status(201)
+      .json({
+        hiringId: hiringProcess._id,
+        companyId: hiringProcess.companyId,
+      });
   } catch (error) {
     console.error("Failed to register candidate:", error);
     res.status(500).json({ message: "Failed to register candidate" });
